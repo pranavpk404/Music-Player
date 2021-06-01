@@ -22,6 +22,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.stop.clicked.connect(self.stop_music)
         self.change_dir.clicked.connect(self.browse)
         self.listWidget.clicked.connect(self.list_sel)
+        # self.horizontalSlider(self.change_volume)
 
         self.show()
 
@@ -90,10 +91,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     mixer.music.set_volume(1)
 
+    def change_volume(self):
+        p = self.horizontalSlider.pos()
+        print(p)
+
 
 if __name__ == '__main__':
     app = QApplication([])
-    app.setApplicationName("Calculator")
-
     window = MainWindow()
     app.exec_()
