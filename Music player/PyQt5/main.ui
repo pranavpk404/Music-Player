@@ -6,19 +6,23 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>395</width>
+    <width>405</width>
     <height>519</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Music Box</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>res/icon.ico</normaloff>res/icon.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="play">
     <property name="geometry">
      <rect>
       <x>240</x>
-      <y>20</y>
+      <y>30</y>
       <width>101</width>
       <height>81</height>
      </rect>
@@ -35,7 +39,7 @@
      <bool>false</bool>
     </property>
     <property name="text">
-     <string>Play</string>
+     <string/>
     </property>
     <property name="icon">
      <iconset>
@@ -43,8 +47,8 @@
     </property>
     <property name="iconSize">
      <size>
-      <width>50</width>
-      <height>50</height>
+      <width>75</width>
+      <height>75</height>
      </size>
     </property>
     <property name="flat">
@@ -55,7 +59,7 @@
     <property name="geometry">
      <rect>
       <x>240</x>
-      <y>120</y>
+      <y>130</y>
       <width>101</width>
       <height>81</height>
      </rect>
@@ -69,7 +73,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Pause</string>
+     <string/>
     </property>
     <property name="icon">
      <iconset>
@@ -77,8 +81,8 @@
     </property>
     <property name="iconSize">
      <size>
-      <width>50</width>
-      <height>50</height>
+      <width>75</width>
+      <height>75</height>
      </size>
     </property>
     <property name="flat">
@@ -103,7 +107,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Stop</string>
+     <string/>
     </property>
     <property name="icon">
      <iconset>
@@ -111,8 +115,8 @@
     </property>
     <property name="iconSize">
      <size>
-      <width>50</width>
-      <height>50</height>
+      <width>75</width>
+      <height>75</height>
      </size>
     </property>
     <property name="flat">
@@ -123,7 +127,7 @@
     <property name="geometry">
      <rect>
       <x>240</x>
-      <y>320</y>
+      <y>310</y>
       <width>141</width>
       <height>81</height>
      </rect>
@@ -156,32 +160,6 @@
     </property>
     <property name="flat">
      <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLabel" name="total_length">
-    <property name="geometry">
-     <rect>
-      <x>260</x>
-      <y>440</y>
-      <width>121</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Total Length</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>260</x>
-      <y>470</y>
-      <width>111</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Current Time</string>
     </property>
    </widget>
    <widget class="QListWidget" name="listWidget">

@@ -1,131 +1,100 @@
-from PyQt5.QtCore import QRect, QCoreApplication, QMetaObject, QSize
-from PyQt5.QtGui import QFont, QPixmap, QIcon
-from PyQt5.QtWidgets import QWidget, QPushButton, QApplication, QMainWindow, QLabel, QListWidget
+from PyQt5.QtWidgets import QFileDialog, QMessageBox, QApplication, QMainWindow
+from os import chdir, listdir
+from pygame import mixer
 
-import resource as brain
+from ui import Ui_MainWindow
 
+file = open("path.txt", "r+")
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
+mixer.init()
 
-        def play():
-            brain.play_music(MainWindow)
-
-        def pause():
-            brain.pause_music()
-
-        def stop():
-            brain.stop_music()
-
-        def find():
-            brain.browse(self.listView)
-
-        def list_clicked():
-            brain.list_sel(self.listView)
+paused = False
 
 
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(395, 519)
-        self.centralwidget = QWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
+class MainWindow(QMainWindow, Ui_MainWindow):
+    def __init__(self, *args, **kwargs):
+        super(MainWindow, self).__init__(*args, **kwargs)
+        self.setupUi(self)
 
-        self.listView = QListWidget(self.centralwidget)
-        self.listView.setGeometry(QRect(0, 0, 201, 521))
-        self.listView.setObjectName("listView")
-        self.listView.itemClicked.connect(list_clicked)
+        self.first_try_to_list()
+        self.play.clicked.connect(self.play_music)
+        self.pause.clicked.connect(self.pause_music)
+        self.stop.clicked.connect(self.stop_music)
+        self.change_dir.clicked.connect(self.browse)
+        self.listWidget.clicked.connect(self.list_sel)
+        self.show()
 
-        self.play = QPushButton(self.centralwidget)
-        self.play.setGeometry(QRect(240, 20, 101, 81))
-        font = QFont()
-        font.setBold(True)
-        font.setItalic(True)
-        font.setUnderline(True)
-        font.setWeight(75)
-        self.play.setFont(font)
-        self.play.setAutoFillBackground(False)
-        icon = QIcon()
-        icon.addPixmap(QPixmap("res/play.png"), QIcon.Normal, QIcon.Off)
-        self.play.setIcon(icon)
-        self.play.setIconSize(QSize(50, 50))
-        self.play.setFlat(True)
-        self.play.setObjectName("play")
-        self.play.clicked.connect(play)
+    def list_file(self):
+        song_list = listdir()
+        for i in song_list:
+            pos = 0
+            self.listWidget.insertItem(pos, i)
+            pos += 1
 
-        self.pause = QPushButton(self.centralwidget)
-        self.pause.setGeometry(QRect(240, 120, 101, 81))
-        font = QFont()
-        font.setBold(True)
-        font.setItalic(True)
-        font.setUnderline(True)
-        font.setWeight(75)
-        self.pause.setFont(font)
-        icon1 = QIcon()
-        icon1.addPixmap(QPixmap("res/pause.png"), QIcon.Normal, QIcon.Off)
-        self.pause.setIcon(icon1)
-        self.pause.setIconSize(QSize(50, 50))
-        self.pause.setFlat(True)
-        self.pause.setObjectName("pause")
-        self.pause.clicked.connect(pause)
+    def first_try_to_list(self):
+        try:
+            chdir(file.readline())
+        except Exception as e:
+            directory = QFileDialog.getExistingDirectory()
+            chdir(directory)
+            self.listWidget.clear()
+            self.list_file()
+            print(e)
+            file.write(directory)
+        self.list_file()
 
-        self.stop = QPushButton(self.centralwidget)
-        self.stop.setGeometry(QRect(240, 220, 101, 81))
-        font = QFont()
-        font.setBold(True)
-        font.setItalic(True)
-        font.setUnderline(True)
-        font.setWeight(75)
-        self.stop.setFont(font)
-        icon2 = QIcon()
-        icon2.addPixmap(QPixmap("res/stop.png"), QIcon.Normal, QIcon.Off)
-        self.stop.setIcon(icon2)
-        self.stop.setIconSize(QSize(50, 50))
-        self.stop.setFlat(True)
-        self.stop.setObjectName("stop")
-        self.stop.clicked.connect(stop)
+    def browse(self):
+        directory = QFileDialog.getExistingDirectory()
+        chdir(directory)
+        self.listWidget.clear()
+        self.list_file()
 
-        self.change_dir = QPushButton(self.centralwidget)
-        self.change_dir.setGeometry(QRect(240, 320, 141, 81))
-        font = QFont()
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setItalic(True)
-        font.setUnderline(True)
-        font.setWeight(75)
-        font.setStrikeOut(False)
-        self.change_dir.setFont(font)
-        icon3 = QIcon()
-        icon3.addPixmap(QPixmap("res/find.png"), QIcon.Normal, QIcon.Off)
-        self.change_dir.setIcon(icon3)
-        self.change_dir.setIconSize(QSize(50, 50))
-        self.change_dir.setDefault(False)
-        self.change_dir.setFlat(True)
-        self.change_dir.setObjectName("change_dir")
-        self.change_dir.clicked.connect(find)
+        file.write(directory)
+        file.seek(0)
+        file.truncate()
+        file.write(directory)
 
+    def list_sel(self):
+        global item
+        item = self.listWidget.currentItem()
+        item = item.text()
 
-        MainWindow.setCentralWidget(self.centralwidget)
+    def play_music(self):
+        global paused
 
-        self.retranslateUi(MainWindow)
-        QMetaObject.connectSlotsByName(MainWindow)
+        if paused:
+            mixer.music.unpause()
+            paused = False
 
-        brain.first_try_to_list(self.listView)
+        else:
+            try:
+                self.stop_music()
+                play_it = item
+                mixer.music.load(play_it)
+                mixer.music.play()
 
-    def retranslateUi(self, MainWindow):
-        _translate = QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Music Box"))
-        MainWindow.setWindowIcon(QIcon("res\\icon.ico"))
-        self.play.setText(_translate("MainWindow", "Play"))
-        self.pause.setText(_translate("MainWindow", "Pause"))
-        self.stop.setText(_translate("MainWindow", "Stop"))
-        self.change_dir.setText(_translate("MainWindow", "Change Folder"))
+            except Exception as e:
+                QMessageBox.critical(self.centralwidget,'Error', 'not supported format')
+                print(e)
+
+    @staticmethod
+    def stop_music():
+        mixer.music.stop()
+
+    @staticmethod
+    def pause_music():
+        global paused
+        paused = True
+        mixer.music.pause()
+
+    mixer.music.set_volume(1)
+
+    def change_volume(self):
+        p = self.horizontalSlider.pos()
+        print(p)
 
 
-if __name__ == "__main__":
-    import sys
-
-    app = QApplication(sys.argv)
-    MainWindow = QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
+if __name__ == '__main__':
+    app = QApplication([])
+    window = MainWindow()
+    app.exec_()
