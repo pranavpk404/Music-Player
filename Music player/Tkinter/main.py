@@ -1,4 +1,4 @@
-import tkinter.ttk as ttk
+import tkinter.ttk as tk
 from os import chdir, listdir, getcwd
 from threading import Thread
 from time import sleep
@@ -6,22 +6,16 @@ from tkinter import messagebox as mg, Tk, LEFT, BOTH, GROOVE, PhotoImage, String
 from tkinter.filedialog import askdirectory
 
 from pygame import mixer
-from ttkthemes import ThemedStyle
 
 root = Tk()
-style = ThemedStyle(root)
-
-style.set_theme("equilux")
 root.title('Music Box')
-root.config(bg="black")
+root.config(bg="white")
 root.iconbitmap("res//icon.ico")
 root.geometry('660x350')
 cur_path = getcwd()
-
-
 file = open("path.txt", "r+")
 
-play_list = Listbox(root, bg='#424242', fg="white", selectmode=SINGLE, border=5)
+play_list = Listbox(root, bg='white', fg="black", selectmode=SINGLE, border=5)
 
 
 def list_file():
@@ -124,22 +118,22 @@ mixer.music.set_volume(1)
 var = StringVar()
 
 playPhoto = PhotoImage(file=cur_path + '\\res\\play.png')
-playBtn = ttk.Button(root, image=playPhoto, command=play_music)
+playBtn = tk.Button(root, image=playPhoto, command=play_music)
 
 stopPhoto = PhotoImage(file=cur_path + '\\res\\stop.png')
-stopBtn = ttk.Button(root, image=stopPhoto, command=stop_music)
+stopBtn = tk.Button(root, image=stopPhoto, command=stop_music)
 
 pausePhoto = PhotoImage(file=cur_path + '\\res\\pause.png')
-pauseBtn = ttk.Button(root, image=pausePhoto, command=pause_music)
+pauseBtn = tk.Button(root, image=pausePhoto, command=pause_music)
 
 AddPhoto = PhotoImage(file=cur_path + '\\res\\find.png')
-AddBtn = ttk.Button(root, image=AddPhoto, command=browse)
+AddBtn = tk.Button(root, image=AddPhoto, command=browse)
 
-song_title = ttk.Label(root, font='Helvetica 12 bold', textvariable=var)
 
-lengthlabel = ttk.Label(root, text='Total Length : --:--')
 
-currenttimelabel = ttk.Label(root, text='Current Time : --:--', relief=GROOVE)
+song_title = tk.Label(root,background="white",  textvariable=var)
+lengthlabel = tk.Label(root, background="white",text='Total Length : --:--')
+currenttimelabel = tk.Label(root,background="white", text='Current Time : --:--')
 
 currenttimelabel.pack()
 lengthlabel.pack(pady=5)
